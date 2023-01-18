@@ -7,7 +7,7 @@ const actions: ActionTree<PlaceState, StateInterface> = {
     getUserLocation( { commit } ){
 
         navigator.geolocation.getCurrentPosition(
-            ({ coords }) => commit( Mutation.setCoordinates , coords ),
+            ({ coords }) => commit( Mutation.setCoordinates , { lng: coords.longitude, lat: coords.latitude } ),
             ( error ) => { 
                 alert('Sorry, Geolocalization is not available')
                 throw new Error('Geolocalization is not available')

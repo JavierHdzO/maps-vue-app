@@ -3,7 +3,7 @@ import PlacesModule from './places'
 import { PlaceState } from './places/state'
 
 export interface StateInterface {
-  Places: PlaceState
+  places: PlaceState
 }
 
 export default createStore<StateInterface>({

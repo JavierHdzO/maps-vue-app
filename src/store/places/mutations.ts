@@ -6,8 +6,8 @@ export enum Mutation{
 }
 
 const mutations: MutationTree<PlaceState> = {
-    setCoordinates( state: PlaceState, coords){
-        state.userLocation = coords;
+    setCoordinates( state: PlaceState, { lng, lat }: { lng: number, lat: number }){
+        state.userLocation = [lng, lat];
         state.isLoading = false;
     }
 }
