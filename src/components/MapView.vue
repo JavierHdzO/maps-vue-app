@@ -18,17 +18,41 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import { usePlaceStore } from '@/composables'
+import { Map } from 'mapbox-gl'
 
 export default defineComponent({
     name:"MapView",
     setup(){
       const mapElement =  ref<HTMLDivElement>()
-      const {isUserLocation} =  usePlaceStore()
+      const {isUserLocation, userLocation} =  usePlaceStore()
+
+      const initMap = () => {
+        if(!userLocation.value) throw new Error('Location is not available')
+        
+        setTimeout(()=>{
+          const map = new Map({
+            container: mapElement.value!, // container ID
+            style: 'mapbox://styles/mapbox/streets-v12', // style URL
+            center: userLocation.value, // starting position [lng, lat]
+            zoom: 9, // starting zoom
+          });
+        }, 1)
+        
+      }
 
       onMounted(()=>{
-        console.log(mapElement.value);
+        
+        if( userLocation.value && isUserLocation.value){
+          initMap()
+        }
+      })
+
+      watch( isUserLocation, ( newValue ) => {
+        if(isUserLocation.value){
+          initMap()
+        }
       })
 
       return {
@@ -46,7 +70,7 @@ export default defineComponent({
   position: fixed;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(36, 26, 220, 0.662);
+  background-color: #FFFF;
 }
 
 .loading-map{
