@@ -19,8 +19,9 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue'
-import { usePlaceStore } from '@/composables'
-import { Map } from 'mapbox-gl'
+import { usePlaceStore, useMapStore } from '@/composables'
+import { Map, Marker, Popup } from 'mapbox-gl'
+import {  } from '@/composables/useMapStore'
 
 export default defineComponent({
     name:"MapView",
@@ -28,18 +29,31 @@ export default defineComponent({
       const mapElement =  ref<HTMLDivElement>()
       const {isUserLocation, userLocation} =  usePlaceStore()
 
-      const initMap = () => {
+      const { map, setMap } = useMapStore()
+      const initMap = async () => {
         if(!userLocation.value) throw new Error('Location is not available')
         
-        setTimeout(()=>{
-          const map = new Map({
+        await Promise.resolve()
+
+        const map = new Map({
             container: mapElement.value!, // container ID
             style: 'mapbox://styles/mapbox/streets-v12', // style URL
             center: userLocation.value, // starting position [lng, lat]
-            zoom: 9, // starting zoom
-          });
-        }, 1)
+            zoom: 15, // starting zoom
+          })
+
+
+        const myLocationPopup =  new Popup()
+          .setLngLat(userLocation.value)
+          .setHTML(`<p>Home</p>
+          ${userLocation.value}`)
+
+        const myLocationMarker = new Marker()
+          .setLngLat(userLocation.value)
+          .setPopup(myLocationPopup)
+          .addTo(map)
         
+        setMap(map)
       }
 
       onMounted(()=>{
