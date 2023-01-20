@@ -13,6 +13,8 @@ export const useMapStore = () => {
         distance: computed( () => store.state.map.distance ),
         duration: computed( () => store.state.map.duration ),
         
+        //getters
+        isMap: computed<boolean>( () => store.getters['map/isMap']),
         //mutation
         setMap: (mapInstance: Map) => store.commit('map/setMap', mapInstance)
 

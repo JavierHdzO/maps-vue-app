@@ -21,7 +21,6 @@
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { usePlaceStore, useMapStore } from '@/composables'
 import { Map, Marker, Popup } from 'mapbox-gl'
-import {  } from '@/composables/useMapStore'
 
 export default defineComponent({
     name:"MapView",
